@@ -21,6 +21,16 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
+  redis:
+    image: redis:7.2.4
+    command: [ "redis-server", "--requirepass sCYF4GyWp6ZXu7YOwT2i" ]
+    container_name: redis
+    restart: always
+    volumes:
+      - redis_volume_data:/data
+    ports:
+      - "127.0.0.1:41201:6379"
+
   postgres:
     image: postgres:14
     environment:
@@ -38,6 +48,7 @@ services:
     depends_on:
       - postgres
       - kafka
+      - redis
     ports:
       - "8000:8000"
     environment:
@@ -46,3 +57,4 @@ services:
 
 volumes:
   postgres_data:
+  redis_volume_data:
